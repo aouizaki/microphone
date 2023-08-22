@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Voice Activation Example</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<style>
+    body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+button {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<body>
+    <div class="container">
+        <button id="startButton">Start Listening</button>
+    </div>
+    <script>
+        const startButton = document.getElementById('startButton');
+const recognition = new window.webkitSpeechRecognition();
+
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.lang = 'en-US';
+
+startButton.addEventListener('click', () => {
+    recognition.start();
+});
+
+recognition.onresult = (event) => {
+    const lastResultIndex = event.results.length - 1;
+    const transcript = event.results[lastResultIndex][0].transcript;
+
+    if (transcript.toLowerCase().includes('hello')) {
+        playAudio();
+    }
+};
+
+recognition.onend = () => {
+    console.log('Recognition ended. Restarting...');
+    recognition.start();
+};
+
+recognition.onerror = (event) => {
+    console.error('Recognition error:', event.error);
+};
+
+function playAudio() {
+    const audio = new Audio('019--1.mp3');
+    audio.play();
+}
+
+    </script>
+</body>
+</html>
